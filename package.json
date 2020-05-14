@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/MSPC-Tech/Transport-Mail-Automation/issues"
   },
-  "homepage": "https://github.com/MSPC-Tech/Transport-Mail-Automation#readme"
+  "homepage": "https://github.com/MSPC-Tech/Transport-Mail-Automation#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.2",
+    "express": "^4.17.1",
+    "formidable": "^1.2.2",
+    "multer": "^1.4.2",
+    "mysql": "^2.18.1",
+    "read-excel-file": "^4.0.6",
+    "xlsx": "^0.16.0"
+  }
 }
