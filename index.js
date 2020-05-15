@@ -8,8 +8,8 @@ const app = express();
  
 global.__basedir = __dirname;
 
-let date = new Date();
-let datetime = date.getDate()+" "+date.getMonth()+" "+date.getFullYear()+"-"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+const date = new Date();
+const datetime = date.getDate()+" "+date.getMonth()+" "+date.getFullYear()+"-"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 
 // -> Multer Upload Storage
 const storage = multer.diskStorage({
