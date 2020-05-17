@@ -1,11 +1,11 @@
-var connection = require('./config');
-const fs = require('fs');
-const mysql = require('mysql');
-const multer = require('multer');
-const express = require('express');
-const readXlsxFile = require('read-excel-file/node');
+let connection = require("./config");
+const fs = require("fs");
+const multer = require("multer");
+const express = require("express");
+const readXlsxFile = require("read-excel-file/node");
 const app = express();
- 
+let nodemailer = require("nodemailer");
+
 global.__basedir = __dirname;
 
 const date = new Date();
@@ -14,25 +14,25 @@ const datetime = date.getDate()+" "+date.getMonth()+" "+date.getFullYear();
 // -> Multer Upload Storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-     cb(null, __basedir + '/uploads/')
+    cb(null, __basedir + "/uploads/");
   },
   filename: (req, file, cb) => {
-     cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname)
-  }
+    cb(null, file.fieldname + "-" + Date.now() + "-" + file.originalname);
+  },
 });
- 
-const upload = multer({storage: storage});
- 
+
+const upload = multer({ storage: storage });
+
 // -> Express Upload RestAPIs
 app.post('/api/uploadfile', upload.single("uploadfile"), (req, res) =>{
   importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
 
-  // -> Import Excel Data to MySQL database
+  // -> Import`'+ datetime +'`Excel Data to MySQL database
 function importExcelData2MySQL(filePath){
   // File path.
   readXlsxFile(filePath).then((rows) => {
     // `rows` is an array of rows
-    // each row being an array of cells.   
+    // each row being an array of cells.
     console.log(rows);
     // Remove Header ROW
     rows.shift();
@@ -60,36 +60,37 @@ function importExcelData2MySQL(filePath){
  
 /* SQL BEGINS */
 
+/* SQL BEGINS */
 
 //Data Variables
 let totv = [];
-let speedv=[];
-let stoppagev=[];
-let routev=[];
+let speedv = [];
+let stoppagev = [];
+let routev = [];
 
 //Data Functions
 function totalv(value) {
   totv = value;
-  for(i in totv){
-       console.log(totv[i].EMAIL);
+  for (i in totv) {
+    console.log(totv[i].EMAIL);
   }
 }
 function speedviol(value) {
   speedv = value;
-  for(i in speedv){
-       console.log(speedv[i].EMAIL);
+  for (i in speedv) {
+    console.log(speedv[i].EMAIL);
   }
 }
 function stoppageviol(value) {
   stoppagev = value;
-  for(i in stoppagev){
-       console.log(stoppagev[i].EMAIL);
+  for (i in stoppagev) {
+    console.log(stoppagev[i].EMAIL);
   }
 }
 function routeviol(value) {
   routev = value;
-  for(i in routev){
-       console.log(routev[i].EMAIL);
+  for (i in routev) {
+    console.log(routev[i].EMAIL);
   }
 }
 
@@ -104,58 +105,92 @@ app.get('/upload', (req, res) => {
   });
 }); */
 
-
 //total violations
-app.get('/totalviolations', (req, res) => {
-  let sql = 'SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.TOTAL_TRIPS_WITH_VOILATION>2;';
-  let query = connection.query(sql, (err,result)=>{
-      if(err){
-          throw err;
-      } 
-      else {
-          totalv(result);
-          res.send(result);
-      }
+app.get("/totalviolations", (req, res) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.TOTAL_TRIPS_WITH_VOILATION>2;';
+  let query = connection.query(sql, (err, emails) => {
+    if (err) {
+      throw err;
+    } else {
+      totalv(emails);
+        var mailer = async (no, emails) => {
+        var ar = emails;
+        var arr = [];
+        for (i in emails) {
+          arr.push(ar[i].EMAIL);
+        }
+        
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
+          // host: "smtp.ethereal.email",
+          // port: 587,
+          // secure: false, // true for 465, false for other ports
+          auth: {
+            user: "",
+            pass: "",
+          },
+          tls: {
+            rejectUnauthorized: false,
+          },
+        });
+        for (i in arr){
+        let info = await transporter.sendMail({
+          from: '"yoman" <example@yo.com>', // sender address
+          to: arr[i], // list of receivers
+          subject: "Hello", // Subject line
+          text: "Hello world", // plain text body
+          html: "<b>Hello world?</b>", // html body
+          
+        });
+        console.log(arr[i]);
+        console.log("Message sent: %s", info.messageId);
+        }
+        console.log("All Mail Sent!!");
+        res.send(emails);
+      };
+      mailer(emails.length, emails);
+    }
   });
 });
 
 //speed violations
-app.get('/speedviolations', (req, res) => {
-  let sql = 'SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_SPEED_VOILATIONS>0;';
-  let query = connection.query(sql, (err,result)=>{
-      if(err) throw err;
-      speedviol(result);
-      res.send(result);
+app.get("/speedviolations", (req, res) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_SPEED_VOILATIONS>0;';
+  let query = connection.query(sql, (err, result) => {
+    if (err) throw err;
+    speedviol(result);
+    mailer(result.length, result);
   });
 });
 
 //stoppage violations
-app.get('/stopviolations', (req, res) => {
-  let sql = 'SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_STOPPAGE_VOILATIONS>0;';
-  let query = connection.query(sql, (err,result)=>{
-      if(err) throw err;
-      stoppageviol(result);
-      res.send(result);
+app.get("/stopviolations", (req, res) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_STOPPAGE_VOILATIONS>0;';
+  let query = connection.query(sql, (err, result) => {
+    if (err) throw err;
+    stoppageviol(result);
+    mailer(result.length, result);
   });
 });
 
 //route violations
-app.get('/routeviolations', (req, res) => {
-  let sql = 'SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_ROUTE_VOILATIONS>0;';
-  let query = connection.query(sql, (err,result)=>{
-      if(err) throw err;
-      routeviol(result);
-      res.send(result);
+app.get("/routeviolations", (req, res) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_ROUTE_VOILATIONS>0;';
+  let query = connection.query(sql, (err, result) => {
+    if (err) throw err;
+    routeviol(result);
+    mailer(result.length, result);
   });
 });
 
 /* SQL ENDS */
 
+
+
 // Create a Server
 let server = app.listen(8080, function () {
- 
-  let host = server.address().address
-  let port = server.address().port
- 
-  console.log("App listening at http://%s:%s", host, port) 
-})
+  let host = server.address().address;
+  let port = server.address().port;
+
+  console.log("App listening at http://%s:%s", host, port);
+});
