@@ -113,25 +113,20 @@ app.get("/totalviolations", (req, res) => {
       throw err;
     } else {
       totalv(emails);
-        var mailer = async (no, emails) => {
-        var ar = emails;
-        var arr = [];
-        for (i in emails) {
-          arr.push(ar[i].EMAIL);
-        }
-        for (i in arr){
+        let mailer = async (no, emails) => {
+        for (i in emails){
         let info = await transporter.sendMail({
           from: '"yoman" <example@yo.com>', // sender address
-          to: arr[i], // list of receivers
+          to: emails[i].EMAIL, // list of receivers
           subject: "Hello", // Subject line
           text: "Hello world", // plain text body
           html: "<b>Hello world?</b>", // html body
           
         });
-        console.log(arr[i]);
+        console.log(emails[i].EMAIL);
         console.log("Message sent: %s", info.messageId);
         }
-        console.log("All Mail Sent!!");
+        console.log("All Mails Sent!!");
         res.send(emails);
       };
       mailer(emails.length, emails);
@@ -142,30 +137,78 @@ app.get("/totalviolations", (req, res) => {
 //speed violations
 app.get("/speedviolations", (req, res) => {
   let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_SPEED_VOILATIONS>0;';
-  let query = connection.query(sql, (err, result) => {
+  let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
-    speedviol(result);
-    mailer(result.length, result);
+    speedviol(emails);
+    let mailer = async (no, emails) => {
+      for (i in emails){
+      let info = await transporter.sendMail({
+        from: '"yoman" <example@yo.com>', // sender address
+        to: emails[i].EMAIL, // list of receivers
+        subject: "Hello2", // Subject line
+        text: "Hello world2", // plain text body
+        html: "<b>Hello world2?</b>", // html body
+        
+      });
+      console.log(emails[i].EMAIL);
+      console.log("Message sent: %s", info.messageId);
+      }
+      console.log("All Mails Sent!!");
+      res.send(emails);
+    };
+    mailer(emails.length, emails);
   });
 });
 
 //stoppage violations
 app.get("/stopviolations", (req, res) => {
   let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_STOPPAGE_VOILATIONS>0;';
-  let query = connection.query(sql, (err, result) => {
+  let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
-    stoppageviol(result);
-    mailer(result.length, result);
+    stoppageviol(emails);
+    let mailer = async (no, emails) => {
+      for (i in emails){
+      let info = await transporter.sendMail({
+        from: '"yoman" <example@yo.com>', // sender address
+        to: emails[i].EMAIL, // list of receivers
+        subject: "Hello3", // Subject line
+        text: "Hello world3", // plain text body
+        html: "<b>Hello world3?</b>", // html body
+        
+      });
+      console.log(emails[i].EMAIL);
+      console.log("Message sent: %s", info.messageId);
+      }
+      console.log("All Mails Sent!!");
+      res.send(emails);
+    };
+    mailer(emails.length, emails);
   });
 });
 
 //route violations
 app.get("/routeviolations", (req, res) => {
   let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_ROUTE_VOILATIONS>0;';
-  let query = connection.query(sql, (err, result) => {
+  let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
-    routeviol(result);
-    mailer(result.length, result);
+    routeviol(emails);
+    let mailer = async (no, emails) => {
+      for (i in emails){
+      let info = await transporter.sendMail({
+        from: '"yoman" <example@yo.com>', // sender address
+        to: emails[i].EMAIL, // list of receivers
+        subject: "Hello4", // Subject line
+        text: "Hello world4", // plain text body
+        html: "<b>Hello world4?</b>", // html body
+        
+      });
+      console.log(emails[i].EMAIL);
+      console.log("Message sent: %s", info.messageId);
+      }
+      console.log("All Mails Sent!!");
+      res.send(emails);
+    };
+    mailer(emails.length, emails);
   });
 });
 
