@@ -1,10 +1,10 @@
-let connection = require("./config");
+let connection = require("./config/config");
 const fs = require("fs");
 const multer = require("multer");
 const express = require("express");
 const readXlsxFile = require("read-excel-file/node");
 const app = express();
-let nodemailer = require("nodemailer");
+let transporter = require("./config/emailConfig");
 
 global.__basedir = __dirname;
 
@@ -119,20 +119,6 @@ app.get("/totalviolations", (req, res) => {
         for (i in emails) {
           arr.push(ar[i].EMAIL);
         }
-        
-        let transporter = nodemailer.createTransport({
-          service: "gmail",
-          // host: "smtp.ethereal.email",
-          // port: 587,
-          // secure: false, // true for 465, false for other ports
-          auth: {
-            user: "",
-            pass: "",
-          },
-          tls: {
-            rejectUnauthorized: false,
-          },
-        });
         for (i in arr){
         let info = await transporter.sendMail({
           from: '"yoman" <example@yo.com>', // sender address
