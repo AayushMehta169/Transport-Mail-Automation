@@ -1,28 +1,16 @@
-var connection = require("./config");
+let connection = require("./config/config");
 const fs = require("fs");
-const mysql = require("mysql");
 const multer = require("multer");
 const express = require("express");
 const readXlsxFile = require("read-excel-file/node");
 const app = express();
-var nodemailer = require("nodemailer");
+let transporter = require("./config/emailConfig");
 
 global.__basedir = __dirname;
 
 const date = new Date();
-const datetime =
-  date.getDate() +
-  " " +
-  date.getMonth() +
-  " " +
-  date.getFullYear() +
-  "-" +
-  date.getHours() +
-  ":" +
-  date.getMinutes() +
-  ":" +
-  date.getSeconds();
-
+const datetime = date.getDate()+" "+date.getMonth()+" "+date.getFullYear();
+// +"-"+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds()
 // -> Multer Upload Storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -36,17 +24,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // -> Express Upload RestAPIs
-app.post("/api/uploadfile", upload.single("uploadfile"), (req, res) => {
-  importExcelData2MySQL(__basedir + "/uploads/" + req.file.filename);
-  res.json({
-    msg: "File uploaded/import successfully!",
-    file: req.file,
-    "Date Uploaded": datetime,
-  });
-});
+app.post('/api/uploadfile', upload.single("uploadfile"), (req, res) =>{
+  importExcelData2MySQL(__basedir + '/uploads/' + req.file.filename);
 
-// -> Import Excel Data to MySQL database
-function importExcelData2MySQL(filePath) {
+  // -> Import`'+ datetime +'`Excel Data to MySQL database
+function importExcelData2MySQL(filePath){
   // File path.
   readXlsxFile(filePath).then((rows) => {
     // `rows` is an array of rows
@@ -54,23 +36,29 @@ function importExcelData2MySQL(filePath) {
     console.log(rows);
     // Remove Header ROW
     rows.shift();
-    // MySQL data insert using previous connection
-    let queryinit =
-      "CREATE TABLE test1 (ZONE varchar(255),LOCATION_CODE varchar(255),TANK_TRUCK_NUMBER varchar(255),TRANSPORTER_CODE varchar(255),TRANSPORTER_NAME varchar(255),TOTAL_NO_OF_TRIPS varchar(255),TOTAL_TRIPS_WITH_VOILATION varchar(255),NO_OF_SPEED_VOILATIONS varchar(255),NO_OF_STOPPAGE_VOILATIONS varchar(255),NO_OF_ROUTE_VOILATIONS varchar(255),FROM_DATE varchar(255),TO_DATE varchar(255),EMAIL varchar(255));";
-    connection.query(queryinit, (error, response) => {
-      if (error) {
-        console.log(error);
-      }
-    });
-    let query =
-      "INSERT INTO test1 (`ZONE`, `LOCATION_CODE`, `TANK_TRUCK_NUMBER`, `TRANSPORTER_CODE`, `TRANSPORTER_NAME`, `TOTAL_NO_OF_TRIPS`, `TOTAL_TRIPS_WITH_VOILATION`, `NO_OF_SPEED_VOILATIONS`, `NO_OF_STOPPAGE_VOILATIONS`, `NO_OF_ROUTE_VOILATIONS`, `FROM_DATE`, `TO_DATE`, `EMAIL`) VALUES ?";
-    connection.query(query, [rows], (error, response) => {
-      if (error) {
-        console.log(error);
-      }
-    });
-  });
+	// MySQL data insert using previous connection
+	  let queryinit= 'CREATE TABLE `'+ datetime +'` (ZONE varchar(255),LOCATION_CODE varchar(255),TANK_TRUCK_NUMBER varchar(255),TRANSPORTER_CODE varchar(255),TRANSPORTER_NAME varchar(255),TOTAL_NO_OF_TRIPS varchar(255),TOTAL_TRIPS_WITH_VOILATION varchar(255),NO_OF_SPEED_VOILATIONS varchar(255),NO_OF_STOPPAGE_VOILATIONS varchar(255),NO_OF_ROUTE_VOILATIONS varchar(255),FROM_DATE varchar(255),TO_DATE varchar(255));';
+        connection.query(queryinit,(error, response) => {
+			if(error){
+        console.log(error);}
+        });
+        let query = 'INSERT INTO `'+ datetime +'` (`ZONE`, `LOCATION_CODE`, `TANK_TRUCK_NUMBER`, `TRANSPORTER_CODE`, `TRANSPORTER_NAME`, `TOTAL_NO_OF_TRIPS`, `TOTAL_TRIPS_WITH_VOILATION`, `NO_OF_SPEED_VOILATIONS`, `NO_OF_STOPPAGE_VOILATIONS`, `NO_OF_ROUTE_VOILATIONS`, `FROM_DATE`, `TO_DATE`) VALUES ?';
+        connection.query(query, [rows], (error, response) => {
+			if(error){
+        console.log(error);}
+        });
+  })
 }
+
+    
+  res.json({
+        'msg': 'File uploaded/import successfully!', 'file': req.file, 'Date Uploaded':datetime
+      });
+});
+ 
+
+ 
+/* SQL BEGINS */
 
 /* SQL BEGINS */
 
@@ -119,91 +107,114 @@ app.get('/upload', (req, res) => {
 
 //total violations
 app.get("/totalviolations", (req, res) => {
-  let sql =
-    "SELECT emaildetails.EMAIL FROM test1 INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = Test1.TRANSPORTER_CODE WHERE test1.TOTAL_TRIPS_WITH_VOILATION>2;";
-  let query = connection.query(sql, (err, result) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.TOTAL_TRIPS_WITH_VOILATION>2;';
+  let query = connection.query(sql, (err, emails) => {
     if (err) {
       throw err;
     } else {
-      totalv(result);
-      res.send(result);
-      console.log(result.length);
-      mailer(result.length, result);
+      totalv(emails);
+        let mailer = async (no, emails) => {
+        for (i in emails){
+        let info = await transporter.sendMail({
+          from: '"yoman" <example@yo.com>', // sender address
+          to: emails[i].EMAIL, // list of receivers
+          subject: "Hello", // Subject line
+          text: "Hello world", // plain text body
+          html: "<b>Hello world?</b>", // html body
+          
+        });
+        console.log(emails[i].EMAIL);
+        console.log("Message sent: %s", info.messageId);
+        }
+        console.log("All Mails Sent!!");
+        res.send(emails);
+      };
+      mailer(emails.length, emails);
     }
   });
 });
 
 //speed violations
 app.get("/speedviolations", (req, res) => {
-  let sql =
-    "SELECT emaildetails.EMAIL FROM test1 INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = Test1.TRANSPORTER_CODE WHERE test1.NO_OF_SPEED_VOILATIONS>0;";
-  let query = connection.query(sql, (err, result) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_SPEED_VOILATIONS>0;';
+  let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
-    speedviol(result);
-    res.send(result);
-    mailer(result.length, result);
+    speedviol(emails);
+    let mailer = async (no, emails) => {
+      for (i in emails){
+      let info = await transporter.sendMail({
+        from: '"yoman" <example@yo.com>', // sender address
+        to: emails[i].EMAIL, // list of receivers
+        subject: "Hello2", // Subject line
+        text: "Hello world2", // plain text body
+        html: "<b>Hello world2?</b>", // html body
+        
+      });
+      console.log(emails[i].EMAIL);
+      console.log("Message sent: %s", info.messageId);
+      }
+      console.log("All Mails Sent!!");
+      res.send(emails);
+    };
+    mailer(emails.length, emails);
   });
 });
 
 //stoppage violations
 app.get("/stopviolations", (req, res) => {
-  let sql =
-    "SELECT emaildetails.EMAIL FROM test1 INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = Test1.TRANSPORTER_CODE WHERE test1.NO_OF_STOPPAGE_VOILATIONS>0;";
-  let query = connection.query(sql, (err, result) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_STOPPAGE_VOILATIONS>0;';
+  let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
-    stoppageviol(result);
-    res.send(result);
-    mailer(result.length, result);
+    stoppageviol(emails);
+    let mailer = async (no, emails) => {
+      for (i in emails){
+      let info = await transporter.sendMail({
+        from: '"yoman" <example@yo.com>', // sender address
+        to: emails[i].EMAIL, // list of receivers
+        subject: "Hello3", // Subject line
+        text: "Hello world3", // plain text body
+        html: "<b>Hello world3?</b>", // html body
+        
+      });
+      console.log(emails[i].EMAIL);
+      console.log("Message sent: %s", info.messageId);
+      }
+      console.log("All Mails Sent!!");
+      res.send(emails);
+    };
+    mailer(emails.length, emails);
   });
 });
 
 //route violations
 app.get("/routeviolations", (req, res) => {
-  let sql =
-    "SELECT emaildetails.EMAIL FROM test1 INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = Test1.TRANSPORTER_CODE WHERE test1.NO_OF_ROUTE_VOILATIONS>0;";
-  let query = connection.query(sql, (err, result) => {
+  let sql ='SELECT emaildetails.EMAIL FROM `'+ datetime +'` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `'+ datetime +'`.TRANSPORTER_CODE WHERE `'+ datetime +'`.NO_OF_ROUTE_VOILATIONS>0;';
+  let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
-    routeviol(result);
-    res.send(result);
-    mailer(result.length, result);
+    routeviol(emails);
+    let mailer = async (no, emails) => {
+      for (i in emails){
+      let info = await transporter.sendMail({
+        from: '"yoman" <example@yo.com>', // sender address
+        to: emails[i].EMAIL, // list of receivers
+        subject: "Hello4", // Subject line
+        text: "Hello world4", // plain text body
+        html: "<b>Hello world4?</b>", // html body
+        
+      });
+      console.log(emails[i].EMAIL);
+      console.log("Message sent: %s", info.messageId);
+      }
+      console.log("All Mails Sent!!");
+      res.send(emails);
+    };
+    mailer(emails.length, emails);
   });
 });
 
 /* SQL ENDS */
 
-var mailer = async (no, emails) => {
-  var ar = emails;
-  var arr = [];
-  for (i in emails) {
-    arr.push(ar[i].EMAIL);
-  }
-  var email_adrs = arr.join();
-  console.log(email_adrs);
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    // host: "smtp.ethereal.email",
-    // port: 587,
-    // secure: false, // true for 465, false for other ports
-    auth: {
-      user: "",
-      pass: "",
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
-  });
-  let info = await transporter.sendMail({
-    from: '"yoman" <example@yo.com>', // sender address
-    to: arr, // list of receivers
-    subject: "Hello", // Subject line
-    text: "Hello world", // plain text body
-    html: "<b>Hello world?</b>", // html body
-  });
 
-  console.log(email_adrs);
-  console.log("Message sent: %s", info.messageId);
-  // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-};
 
 // Create a Server
 let server = app.listen(8080, function () {
