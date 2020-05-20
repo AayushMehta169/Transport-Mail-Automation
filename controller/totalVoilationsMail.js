@@ -1,6 +1,7 @@
 const connection = require("../config/config");
 const fs = require("fs");
 const transporter = require("../config/emailConfig");
+const mailer = require("./mailer");
 
 const date = new Date();
 const datetime =
@@ -24,14 +25,16 @@ module.exports.totalvoilations = function (req, res) {
     datetime +
     "`.TRANSPORTER_CODE WHERE `" +
     datetime +
-    "`.TOTAL_TRIPS_WITH_VOILATION>2;";
+    "`.TOTAL_TRIPS_WITH_VOILATION>0;";
   let query = connection.query(sql, (err, emails) => {
     if (err) {
       throw err;
     } else {
       totalv(emails);
       var type = 4;
-      mailer(emails.length, emails, type);
+      mailer.mailer(emails.length, emails, type);
+      console.log(sql);
+      res.send(emails);
     }
   });
 };

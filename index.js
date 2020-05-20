@@ -72,7 +72,7 @@ app.get("/speedviolations", speedviolationscontroller.speedvoilations);
 app.get("/stopviolations", stopviolationscontroller.stopvoilations);
 
 //route violations
-app.get("/routeviolations", routeviolationscontroller.stopvoilations);
+app.get("/routeviolations", routeviolationscontroller.routevoilations);
 
 // Create a Server
 let server = app.listen(8080, function () {
