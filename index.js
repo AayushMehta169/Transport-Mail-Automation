@@ -59,17 +59,6 @@ const upload = multer({ storage: storage });
 // -> Express Upload RestAPIs
 app.post('/api/uploadfile', upload.single("uploadfile"), uploadfilecontroller.apiuploadfile);
 
-/* //upload email data
-app.get('/upload', (req, res) => {
-  let det = {TRANSPORTER_CODE:"111", EMAIL:"sample1@example.com"};
-  let sql = 'INSERT INTO emaildetails SET ?';
-  let query = db.query(sql, det,  (err,result)=>{
-      if(err) throw err;
-      console.log(result);
-      res.send('Details added');
-  });
-}); */
-
 //total violations
 app.get("/totalviolations", totalvoilationscontroller.totalvoilations);
 
