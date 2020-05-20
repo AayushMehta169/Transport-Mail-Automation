@@ -28,27 +28,7 @@ module.exports.stopvoilations = function (req, res) {
   let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
     routeviol(emails);
-    let mailer = async (no, emails) => {
-      for (i in emails) {
-        let info = await transporter.sendMail({
-          from: '"yoman" <example@yo.com>', // sender address
-          to: emails[i].EMAIL, // list of receivers
-          subject: "Hello4", // Subject line
-          text: "Hello world4", // plain text body
-          html: "<b>Hello world4?</b>", // html body
-          dsn: {
-            id: "123",
-            return: "headers",
-            notify: ["failure", "delay"],
-            recipient: "",
-          },
-        });
-        console.log(emails[i].EMAIL);
-        console.log("Message sent: %s", info.messageId);
-      }
-      console.log("All Mails Sent!!");
-      res.send(emails);
-    };
-    mailer(emails.length, emails);
+    var type = 1;
+    mailer(emails.length, emails, type);
   });
 };

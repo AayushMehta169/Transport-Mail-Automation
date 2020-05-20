@@ -30,28 +30,8 @@ module.exports.totalvoilations = function (req, res) {
       throw err;
     } else {
       totalv(emails);
-      let mailer = async (no, emails) => {
-        for (i in emails) {
-          let info = await transporter.sendMail({
-            from: '"yoman" <example@yo.com>', // sender address
-            to: emails[i].EMAIL, // list of receivers
-            subject: "Hello", // Subject line
-            text: "Hello world", // plain text body
-            html: "<b>Hello world?</b>", // html body
-            dsn: {
-              id: "123",
-              return: "headers",
-              notify: ["failure", "delay"],
-              recipient: "",
-            },
-          });
-          console.log(emails[i].EMAIL);
-          console.log("Message sent: %s", info.messageId);
-        }
-        console.log("All Mails Sent!!");
-        res.send(emails);
-      };
-      mailer(emails.length, emails);
+      var type = 4;
+      mailer(emails.length, emails, type);
     }
   });
 };

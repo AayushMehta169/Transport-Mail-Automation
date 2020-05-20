@@ -1,7 +1,7 @@
 const connection = require("../config/config");
 const fs = require("fs");
 const transporter = require("../config/emailConfig");
-
+const mailer = require("./mailer");
 const date = new Date();
 const datetime =
   date.getDate() + " " + date.getMonth() + " " + date.getFullYear();
@@ -28,27 +28,7 @@ module.exports.speedvoilations = function (req, res) {
   let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
     speedviol(emails);
-    let mailer = async (no, emails) => {
-      for (i in emails) {
-        let info = await transporter.sendMail({
-          from: '"yoman" <example@yo.com>', // sender address
-          to: emails[i].EMAIL, // list of receivers
-          subject: "Hello2", // Subject line
-          text: "Hello world2", // plain text body
-          html: "<b>Hello world2?</b>", // html body
-          dsn: {
-            id: "123",
-            return: "headers",
-            notify: ["failure", "delay"],
-            recipient: "",
-          },
-        });
-        console.log(emails[i].EMAIL);
-        console.log("Message sent: %s", info.messageId);
-      }
-      console.log("All Mails Sent!!");
-      res.send(emails);
-    };
-    mailer(emails.length, emails);
+    var type = 2;
+    mailer(emails.length, emails, type);
   });
 };
