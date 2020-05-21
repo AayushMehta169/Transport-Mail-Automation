@@ -25,7 +25,9 @@ module.exports.stopvoilations = function (req, res) {
     datetime +
     "`.NO_OF_SPEED_VOILATIONS,`" +
     datetime +
-    "`.NO_OF_ROUTE_VOILATIONS,emaildetails.TANK_TRUCK_NUMBER FROM `" +
+    "`.NO_OF_ROUTE_VOILATIONS,`"+
+    datetime +
+    "`.TANK_TRUCK_NUMBER FROM `" +
     datetime +
     "` INNER JOIN emaildetails ON emaildetails.TANK_TRUCK_NUMBER = `" +
     datetime +
