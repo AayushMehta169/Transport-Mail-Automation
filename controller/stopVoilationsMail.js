@@ -1,6 +1,7 @@
 const connection = require("../config/config");
 const fs = require("fs");
 const transporter = require("../config/emailConfig");
+const mailer = require("./mailer");
 
 const date = new Date();
 const datetime =
@@ -29,6 +30,7 @@ module.exports.stopvoilations = function (req, res) {
     if (err) throw err;
     stoppageviol(emails);
     var type = 3;
-    mailer(emails.length, emails, type);
+    mailer.mailer(emails.length, emails, type);
+    res.send(emails);
   });
 };

@@ -45,5 +45,5 @@ module.exports.mailer = async (no, emails, type) => {
     console.log("Message sent: %s", info.messageId);
   }
   console.log("All Mails Sent!!");
-  res.send(emails);
+  
 };

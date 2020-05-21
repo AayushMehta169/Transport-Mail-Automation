@@ -29,6 +29,7 @@ module.exports.speedvoilations = function (req, res) {
     if (err) throw err;
     speedviol(emails);
     var type = 2;
-    mailer(emails.length, emails, type);
+    mailer.mailer(emails.length, emails, type);
+    res.send(emails);
   });
 };

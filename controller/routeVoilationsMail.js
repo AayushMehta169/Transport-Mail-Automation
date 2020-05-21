@@ -1,6 +1,7 @@
 const connection = require("../config/config");
 const fs = require("fs");
 const transporter = require("../config/emailConfig");
+const mailer = require("./mailer");
 
 const date = new Date();
 const datetime =
@@ -16,7 +17,7 @@ function routeviol(value) {
   }
 }
 
-module.exports.stopvoilations = function (req, res) {
+module.exports.routevoilations = function (req, res) {
   let sql =
     "SELECT emaildetails.EMAIL FROM `" +
     datetime +
@@ -29,6 +30,8 @@ module.exports.stopvoilations = function (req, res) {
     if (err) throw err;
     routeviol(emails);
     var type = 1;
-    mailer(emails.length, emails, type);
+    mailer.mailer(emails.length, emails, type);
+    res.send(emails);
   });
+  
 };
