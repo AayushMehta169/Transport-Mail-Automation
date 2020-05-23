@@ -8,25 +8,30 @@ module.exports.mailer = async (no, emails, type) => {
   let speedviolationfile = "Speed_violation.docx";
   let stoppageviolationfile = "Stoppage_violation.docx";
 
-  routeViolationattach = [{filename:routeViolationfile,path:"./public/attachment/" + routeViolationfile,},];
-  speedViolationattach = [{filename:speedviolationfile,path:"./public/attachment/" + speedviolationfile,},];
-  stoppageViolationattach = [{filename:stoppageviolationfile,path:"./public/attachment/" + stoppageviolationfile,},];
+  let routeViolationattach = {filename:routeViolationfile,path:"./public/attachment/" + routeViolationfile,};
+  let speedViolationattach = {filename:speedviolationfile,path:"./public/attachment/" + speedviolationfile,};
+  let stoppageViolationattach = {filename:stoppageviolationfile,path:"./public/attachment/" + stoppageviolationfile,};
 
   for (i in emails) {
+    let attach = [];
+    if(emails[i].NO_OF_ROUTE_VOILATIONS>0){attach.push(routeViolationattach)};
+    if(emails[i].NO_OF_SPEED_VOILATIONS>0){attach.push(speedViolationattach)};
+    if(emails[i].NO_OF_STOPPAGE_VOILATIONS>0){attach.push(stoppageViolationattach)};
+    console.log(attach);
     if(type === 4){
       let info = await transporter.sendMail({
         from: '"yoman" <example@yo.com>', // sender address
         to: emails[i].EMAIL, // list of receivers
-        subject: "TDG Violation", // Subject line
-        html: "<b>TDG Violation"+"<br>"+emails[i].NO_OF_STOPPAGE_VOILATIONS+"<br>"+emails[i].NO_OF_SPEED_VOILATIONS
+        subject: "Violation", // Subject line
+        html: "<b>Violation"+"<br>"+emails[i].NO_OF_STOPPAGE_VOILATIONS+"<br>"+emails[i].NO_OF_SPEED_VOILATIONS
         +"<br>"+emails[i].NO_OF_ROUTE_VOILATIONS+"<br>"+emails[i].TANK_TRUCK_NUMBER+"</b>", // html body
-        attachments:emails[i].NO_OF_ROUTE_VOILATIONS>0?routeViolationattach:emails[i].NO_OF_SPEED_VOILATIONS>0?speedViolationattach
-        :emails[i].NO_OF_STOPPAGE_VOILATIONS>0?stoppageViolationattach:null,
+
+        attachments:attach,
         dsn: {
           id: "123",
           return: "headers",
           notify: ["failure", "delay"],
-          recipient: "",
+          recipient: "example@yo.com",
         },
       });
       console.log(emails[i].EMAIL);
@@ -52,6 +57,9 @@ module.exports.mailer = async (no, emails, type) => {
           notify: ["failure", "delay"],
           recipient: "",
         },
+      }, (error, result) => {
+        if (error) return console.error(error);
+        return console.log(result);
       });
       console.log(emails[i].EMAIL);
       console.log("Message sent: %s", info.messageId);
