@@ -38,6 +38,9 @@ module.exports.mailer = async (no, emails, type) => {
       console.log("Message sent: %s", info.messageId);
     }
 
+    // Mailing Script ends here ------------------------------
+    // Below functions are for future purpose ------------------
+
     if(type === 1){
       let info = await transporter.sendMail({
         from: '"yoman" <example@yo.com>', // sender address

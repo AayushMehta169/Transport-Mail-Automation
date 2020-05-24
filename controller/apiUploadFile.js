@@ -12,6 +12,7 @@ module.exports.apiuploadfile=function(req, res){
   
     // -> Import`'+ datetime +'`Excel Data to MySQL database
   function importExcelData2MySQL(filePath){
+    flag = 0;
     // File path.
     var excelfile = XLSX.readFile(filePath);
       // `rows` is an array of rows
@@ -24,23 +25,37 @@ module.exports.apiuploadfile=function(req, res){
 
       rows = rows.filter(function(value, index, arr){ return value.length === 13;});
       
-      console.log(rows);
       // MySQL data insert using previous connection
           let queryinit= 'CREATE TABLE `'+ datetime +'` (ZONE varchar(255),LOCATION_CODE varchar(255),LOCATION_NAME varchar(255),TANK_TRUCK_NUMBER varchar(255),TRANSPORTER_CODE varchar(255),TRANSPORTER_NAME varchar(255),TOTAL_NO_OF_TRIPS varchar(255),TOTAL_TRIPS_WITH_VOILATION varchar(255),NO_OF_SPEED_VOILATIONS varchar(255),NO_OF_STOPPAGE_VOILATIONS varchar(255),NO_OF_ROUTE_VOILATIONS varchar(255),FROM_DATE varchar(255),TO_DATE varchar(255));';
             connection.query(queryinit,(error, response) => {
-                if(error){
-            console.log(error);}
+              if(!error){
+                let query = 'INSERT INTO `'+ datetime +'` (`ZONE`, `LOCATION_CODE`, `LOCATION_NAME` ,`TANK_TRUCK_NUMBER`, `TRANSPORTER_CODE`, `TRANSPORTER_NAME`, `TOTAL_NO_OF_TRIPS`, `TOTAL_TRIPS_WITH_VOILATION`, `NO_OF_SPEED_VOILATIONS`, `NO_OF_STOPPAGE_VOILATIONS`, `NO_OF_ROUTE_VOILATIONS`, `FROM_DATE`, `TO_DATE`) VALUES ?';
+                connection.query(query, [rows], (error, response) => {
+                  if(error){
+                    flag+=1;
+                    console.log(error);
+                  }
+                  });
+                }
+                else {
+                  flag+=1;
+                  console.log(error);
+                }
             });
-            let query = 'INSERT INTO `'+ datetime +'` (`ZONE`, `LOCATION_CODE`, `LOCATION_NAME` ,`TANK_TRUCK_NUMBER`, `TRANSPORTER_CODE`, `TRANSPORTER_NAME`, `TOTAL_NO_OF_TRIPS`, `TOTAL_TRIPS_WITH_VOILATION`, `NO_OF_SPEED_VOILATIONS`, `NO_OF_STOPPAGE_VOILATIONS`, `NO_OF_ROUTE_VOILATIONS`, `FROM_DATE`, `TO_DATE`) VALUES ?';
-            connection.query(query, [rows], (error, response) => {
-                if(error){
-            console.log(error);}
-            });
+
+            if(flag>0){
+              res.json({
+                'msg': 'File upload/import Failed!', 
+              });
+            }
+            else if(flag==0){
+              res.json({
+                'msg': 'File uploaded/import successfully!', 
+                'file': req.file, 
+                'Date Uploaded':datetime, 
+                'Total Rows':rows.length,
+              });
+            }
+  }      
     
-  }
-  
-      
-    res.json({
-          'msg': 'File uploaded/import successfully!', 'file': req.file, 'Date Uploaded':datetime
-        });
   }
