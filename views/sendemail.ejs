@@ -9,7 +9,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+        <style>
+            .navbar{
+            margin-left:5px;
+            width:100%;
+                }   
+        </style>
 </head>
 
 <body>
@@ -21,36 +26,41 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Previous Upload</a>
+                        <a class="nav-link" href="/previous">Previous Uploads</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+                        <a href="/logout" class="btn btn-danger btn-sm pull-right" >Logout</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container">
-        
+        <div class="alert alert-success mt-2" role="alert">
+            <%= status.msg %>
+          </div>
+          <div class="alert alert-primary" role="alert">
+            Total Rows imported : <%= status.TotalRows %>
+          </div>
         <div class="jumbotron">
-            <p><%= status.msg %></p>
-            <p>Total Rows imported : <%= status.TotalRows %></p>
+            
         <form action="../totalviolations" method="GET" enctype="multipart/form-data">
             <div class="form-group">
               <label for="exampleInputEmail1">Email</label><br>
               <input type="text" name="" id="" accept=".xls,.xlsx">
               
             </div>
-            <input type="submit" class="btn btn-primary"></input>
+            <input type="submit" class="btn btn-primary" value="Send"></input>
           </form>
           </div>
     </div>
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
