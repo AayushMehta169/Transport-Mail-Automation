@@ -14,6 +14,7 @@ const totalvoilationscontroller = require("./controller/totalVoilationsMail");
 const speedviolationscontroller = require("./controller/speedVoilationsMail");
 const stopviolationscontroller = require("./controller/stopVoilationsMail");
 const routeviolationscontroller = require("./controller/routeVoilationsMail");
+const previoustablecontroller = require("./controller/viewPrevious");
 
 global.__basedir = __dirname;
 
@@ -73,6 +74,13 @@ app.get("/stopviolations", stopviolationscontroller.stopvoilations);
 
 //route violations
 app.get("/routeviolations", routeviolationscontroller.routevoilations);
+
+//previous files
+app.get("/previous", previoustablecontroller.previousTable);
+
+
+
+
 
 // Create a Server
 let server = app.listen(8080, function () {
