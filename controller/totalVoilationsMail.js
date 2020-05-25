@@ -34,13 +34,17 @@ module.exports.totalvoilations = function (req, res) {
     "`.TANK_TRUCK_NUMBER WHERE `" +
     datetime +
     "`.TOTAL_TRIPS_WITH_VOILATION>0;";
-  let query = connection.query(sql, (err, emails) => {
+  let query = connection.query(sql, async (err, emails) => {
     if (err) {
-      throw err;
+      console.log(err);
     } else {
       totalv(emails);
       var type = 4;
-      mailer.mailer(emails.length, emails, type);
+      await mailer.mailer(emails.length, emails, type);
+      fs.appendFile('logging.txt', datetime+'\n', function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
       res.send(emails);
     }
   });
