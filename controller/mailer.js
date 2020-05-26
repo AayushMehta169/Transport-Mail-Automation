@@ -1,28 +1,26 @@
 var transporter = require("../config/emailConfig");
 
-module.exports.mailer = async (no, emails, type) => {
-  var loc;
-  var name;
-  let TDGViolationfile = "TDG_Violations.docx";
-  let routeViolationfile = "route_violation.docx";
-  let speedviolationfile = "Speed_violation.docx";
-  let stoppageviolationfile = "Stoppage_violation.docx";
+var loc;
+var name;
+var TDGViolationfile = "TDG_Violations.docx";
+var routeViolationfile = "route_violation.docx";
+var speedviolationfile = "Speed_violation.docx";
+var stoppageviolationfile = "Stoppage_violation.docx";
+var routeViolationattach = {
+  filename: routeViolationfile,
+  path: "./public/attachment/" + routeViolationfile,
+};
+var speedViolationattach = {
+  filename: speedviolationfile,
+  path: "./public/attachment/" + speedviolationfile,
+};
+var stoppageViolationattach = {
+  filename: stoppageviolationfile,
+  path: "./public/attachment/" + stoppageviolationfile,
+};
 
-  let routeViolationattach = {
-    filename: routeViolationfile,
-    path: "./public/attachment/" + routeViolationfile,
-  };
-  let speedViolationattach = {
-    filename: speedviolationfile,
-    path: "./public/attachment/" + speedviolationfile,
-  };
-  let stoppageViolationattach = {
-    filename: stoppageviolationfile,
-    path: "./public/attachment/" + stoppageviolationfile,
-  };
-
-  // FOR EXTRA MAILING
-  if (req.body.email != "") {
+module.exports.extra_mailer = async (no, emails) => {
+  if (req.body.emails != "") {
     //Email will be separated with comma, will be taken from form
     let attach = [];
     if (req.body.radio == "routeViolation") {
@@ -53,6 +51,28 @@ module.exports.mailer = async (no, emails, type) => {
     console.log(emails[i].EMAIL);
     console.log("Message sent: %s", info.messageId);
   }
+};
+
+module.exports.mailer = async (no, emails, type) => {
+  // var loc;
+  // var name;
+  // var TDGViolationfile = "TDG_Violations.docx";
+  // var routeViolationfile = "route_violation.docx";
+  // var speedviolationfile = "Speed_violation.docx";
+  // var stoppageviolationfile = "Stoppage_violation.docx";
+  // var routeViolationattach = {
+  //   filename: routeViolationfile,
+  //   path: "./public/attachment/" + routeViolationfile,
+  // };
+  // var speedViolationattach = {
+  //   filename: speedviolationfile,
+  //   path: "./public/attachment/" + speedviolationfile,
+  // };
+  // var stoppageViolationattach = {
+  //   filename: stoppageviolationfile,
+  //   path: "./public/attachment/" + stoppageviolationfile,
+  // };
+
   for (i in emails) {
     let attach = [];
     if (emails[i].NO_OF_ROUTE_VOILATIONS > 0) {
