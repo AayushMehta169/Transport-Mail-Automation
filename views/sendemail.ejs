@@ -9,7 +9,12 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+        <style>
+            .navbar{
+            margin-left:5px;
+            width:100%;
+                }   
+        </style>
 </head>
 
 <body>
@@ -38,21 +43,24 @@
         </div>
     </nav>
     <div class="container">
-        <div class="page-header text-centers">
-            <h1><span class="fa fa-user"></span> Welcome <%= user.username %></h1>
-        </div>
+        <div class="alert alert-success mt-2" role="alert">
+            <%= status.msg %>
+          </div>
+          <div class="alert alert-primary" role="alert">
+            Total Rows imported : <%= status.TotalRows %>
+          </div>
         <div class="jumbotron">
-        <form action="api/uploadfile" method="POST" enctype="multipart/form-data">
+            
+        <form action="../totalviolations" method="GET" enctype="multipart/form-data">
             <div class="form-group">
-              <label for="exampleInputEmail1">File Upload</label><br>
-              <input type="file" name="uploadfile" id="uploadfile" accept=".xls,.xlsx">
-              <small id="emailHelp" class="form-text text-muted">Please upload excel file only in .xls and .xlsx format</small>
+              <label for="exampleInputEmail1">Email</label><br>
+              <input type="text" name="" id="" accept=".xls,.xlsx">
+              
             </div>
-            <input type="submit" class="btn btn-primary"></input>
+            <input type="submit" class="btn btn-primary" value="Send"></input>
           </form>
           </div>
     </div>
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transport Mail Automation</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="container text-center">
+        <h1>Previous Data</h1>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                  <th>Location Code</th>
+                  <th>Location Name</th>
+                  <th>Tank Truck Number</th>
+                  <th>Transporter Code</th>
+                  <th>Transporter Name</th>
+                  <th>Total No of Trips</th>
+                  <th>Trips With Violations</th>
+                  <th>Speed Violations</th>
+                  <th>Stoppage Violations</th>
+                  <th>Route Violations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for(var i=0; i<details.length; i++) { %>
+                    <tr>
+                        <td><%= details[i].LOCATION_CODE %></td>
+                        <td><%= details[i].LOCATION_NAME %></td>
+                        <td><%= details[i].TANK_TRUCK_NUMBER %></td>
+                        <td><%= details[i].TRANSPORTER_CODE %></td>
+                        <td><%= details[i].TRANSPORTER_NAME %></td>
+                        <td><%= details[i].TOTAL_NO_OF_TRIPS %></td>
+                        <td><%= details[i].TOTAL_TRIPS_WITH_VOILATION %></td>
+                        <td><%= details[i].NO_OF_SPEED_VOILATIONS %></td>
+                        <td><%= details[i].NO_OF_STOPPAGE_VOILATIONS %></td>
+                        <td><%= details[i].NO_OF_ROUTE_VOILATIONS %> </td>
+                      </tr>
+                <% } %>
+              </tbody>
+        </table>
+    </div>
+   
+</body>
+</html>

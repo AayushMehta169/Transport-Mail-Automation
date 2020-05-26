@@ -19,13 +19,21 @@ function routeviol(value) {
 
 module.exports.routevoilations = function (req, res) {
   let sql =
-    "SELECT emaildetails.EMAIL FROM `" +
-    datetime +
-    "` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `" +
-    datetime +
-    "`.TRANSPORTER_CODE WHERE `" +
-    datetime +
-    "`.NO_OF_ROUTE_VOILATIONS>0;";
+  "SELECT emaildetails.EMAIL,`" +
+  datetime +
+  "`.NO_OF_STOPPAGE_VOILATIONS,`" +
+  datetime +
+  "`.NO_OF_SPEED_VOILATIONS,`" +
+  datetime +
+  "`.NO_OF_ROUTE_VOILATIONS,`"+
+  datetime +
+  "`.TANK_TRUCK_NUMBER FROM `" +
+  datetime +
+  "` INNER JOIN emaildetails ON emaildetails.TANK_TRUCK_NUMBER = `" +
+  datetime +
+  "`.TANK_TRUCK_NUMBER WHERE `" +
+  datetime +
+  "`.NO_OF_ROUTE_VOILATIONS>0;";
   let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
     routeviol(emails);

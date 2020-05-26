@@ -19,21 +19,32 @@ function totalv(value) {
 
 module.exports.totalvoilations = function (req, res) {
   let sql =
-    "SELECT emaildetails.EMAIL FROM `" +
+    "SELECT emaildetails.EMAIL,`" +
     datetime +
-    "` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `" +
+    "`.NO_OF_STOPPAGE_VOILATIONS,`" +
     datetime +
-    "`.TRANSPORTER_CODE WHERE `" +
+    "`.NO_OF_SPEED_VOILATIONS,`" +
+    datetime +
+    "`.NO_OF_ROUTE_VOILATIONS,`"+
+    datetime +
+    "`.TANK_TRUCK_NUMBER FROM `" +
+    datetime +
+    "` INNER JOIN emaildetails ON emaildetails.TANK_TRUCK_NUMBER = `" +
+    datetime +
+    "`.TANK_TRUCK_NUMBER WHERE `" +
     datetime +
     "`.TOTAL_TRIPS_WITH_VOILATION>0;";
-  let query = connection.query(sql, (err, emails) => {
+  let query = connection.query(sql, async (err, emails) => {
     if (err) {
-      throw err;
+      console.log(err);
     } else {
       totalv(emails);
       var type = 4;
-      mailer.mailer(emails.length, emails, type);
-      console.log(sql);
+      await mailer.mailer(emails.length, emails, type);
+      fs.appendFile('logging.txt', datetime+'\n', function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
       res.send(emails);
     }
   });

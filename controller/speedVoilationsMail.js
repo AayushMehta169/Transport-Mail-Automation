@@ -18,18 +18,26 @@ function speedviol(value) {
 
 module.exports.speedvoilations = function (req, res) {
   let sql =
-    "SELECT emaildetails.EMAIL FROM `" +
+    "SELECT emaildetails.EMAIL,`" +
     datetime +
-    "` INNER JOIN emaildetails ON emaildetails.TRANSPORTER_CODE = `" +
+    "`.NO_OF_STOPPAGE_VOILATIONS,`" +
     datetime +
-    "`.TRANSPORTER_CODE WHERE `" +
+    "`.NO_OF_SPEED_VOILATIONS,`" +
+    datetime +
+    "`.NO_OF_ROUTE_VOILATIONS,`"+
+    datetime +
+    "`.TANK_TRUCK_NUMBER FROM `" +
+    datetime +
+    "` INNER JOIN emaildetails ON emaildetails.TANK_TRUCK_NUMBER = `" +
+    datetime +
+    "`.TANK_TRUCK_NUMBER WHERE `" +
     datetime +
     "`.NO_OF_SPEED_VOILATIONS>0;";
   let query = connection.query(sql, (err, emails) => {
     if (err) throw err;
     speedviol(emails);
     var type = 2;
-    mailer.mailer(emails.length, emails, type);
+    // mailer.mailer(emails.length, emails, type);
     res.send(emails);
   });
 };
