@@ -24,7 +24,7 @@ module.exports.speedvoilations = function (req, res) {
     datetime +
     "`.NO_OF_SPEED_VOILATIONS,`" +
     datetime +
-    "`.NO_OF_ROUTE_VOILATIONS,`"+
+    "`.NO_OF_ROUTE_VOILATIONS,`" +
     datetime +
     "`.TANK_TRUCK_NUMBER FROM `" +
     datetime +
@@ -38,6 +38,7 @@ module.exports.speedvoilations = function (req, res) {
     speedviol(emails);
     var type = 2;
     // mailer.mailer(emails.length, emails, type);
-    res.send(emails);
+    // res.send(emails);
+    res.render("feedback.ejs", { feeds: emails });
   });
 };

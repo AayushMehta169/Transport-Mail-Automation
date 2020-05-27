@@ -25,7 +25,7 @@ module.exports.totalvoilations = function (req, res) {
     datetime +
     "`.NO_OF_SPEED_VOILATIONS,`" +
     datetime +
-    "`.NO_OF_ROUTE_VOILATIONS,`"+
+    "`.NO_OF_ROUTE_VOILATIONS,`" +
     datetime +
     "`.TANK_TRUCK_NUMBER FROM `" +
     datetime +
@@ -41,11 +41,12 @@ module.exports.totalvoilations = function (req, res) {
       totalv(emails);
       var type = 4;
       await mailer.mailer(emails.length, emails, type);
-      fs.appendFile('logging.txt', datetime+'\n', function (err) {
+      fs.appendFile("logging.txt", datetime + "\n", function (err) {
         if (err) throw err;
-        console.log('Saved!');
+        console.log("Saved!");
       });
-      res.send(emails);
+      // res.send(emails);
+      res.render("feedback.ejs", { feeds: emails });
     }
   });
 };
