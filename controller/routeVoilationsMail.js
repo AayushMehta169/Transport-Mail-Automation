@@ -40,6 +40,6 @@ module.exports.routevoilations = function (req, res) {
     var type = 1;
     mailer.mailer(emails.length, emails, type);
     // res.send(emails);
-    res.render("feedback.ejs", { feeds: emails });
+    res.render("feedback.ejs", { feeds: emails, type: "Route Violation" });
   });
 };

@@ -18,6 +18,7 @@
       <%# feeds.forEach(feed => { %>
             <%#= feed.EMAIL %> 
       <%# }) %>
+        <h5><%= type %></h5> 
         <% for( let i = 0; i < feeds.length; i++ ) { %>
           <p><%= feeds[i].EMAIL %></p>    
         <% } %> 

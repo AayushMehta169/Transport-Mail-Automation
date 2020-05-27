@@ -25,7 +25,7 @@ module.exports.stopvoilations = function (req, res) {
     datetime +
     "`.NO_OF_SPEED_VOILATIONS,`" +
     datetime +
-    "`.NO_OF_ROUTE_VOILATIONS,`"+
+    "`.NO_OF_ROUTE_VOILATIONS,`" +
     datetime +
     "`.TANK_TRUCK_NUMBER FROM `" +
     datetime +
@@ -39,6 +39,8 @@ module.exports.stopvoilations = function (req, res) {
     stoppageviol(emails);
     var type = 3;
     mailer.mailer(emails.length, emails, type);
-    res.send(emails);
+    res.render("feedback.ejs", { feeds: emails, type: "Stop Violation" });
+
+    // res.send(emails);
   });
 };
