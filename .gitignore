@@ -115,3 +115,6 @@ uploads/*.xls
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+
+#prettier
+.prettierignore
