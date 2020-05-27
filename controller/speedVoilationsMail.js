@@ -39,6 +39,6 @@ module.exports.speedvoilations = function (req, res) {
     var type = 2;
     // mailer.mailer(emails.length, emails, type);
     // res.send(emails);
-    res.render("feedback.ejs", { feeds: emails });
+    res.render("feedback.ejs", { feeds: emails, type: "Speed Violation" });
   });
 };
