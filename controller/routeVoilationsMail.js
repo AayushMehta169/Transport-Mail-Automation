@@ -39,7 +39,9 @@ module.exports.routevoilations = function (req, res) {
     routeviol(emails);
     var type = 1;
     mailer.mailer(emails.length, emails, type);
+    // console.log(emails);
     // res.send(emails);
+
     res.render("feedback.ejs", { feeds: emails, type: "Route Violation" });
   });
 };
