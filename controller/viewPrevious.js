@@ -9,8 +9,10 @@ const datetime =
       datetime +
       "`;";
     let query = connection.query(sql, (err, emails) => {
-      if (err) 
-      throw err;
+      if (err){
+        throw err;
+      } 
+      
       else{
         
             res.render('previous.ejs', { details: emails });  
