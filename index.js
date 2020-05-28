@@ -19,6 +19,7 @@ const previoustablecontroller = require("./controller/viewPrevious");
 global.__basedir = __dirname;
 
 //Login Middleware
+
 require("./config/passport")(passport);
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -77,10 +78,6 @@ app.get("/routeviolations", routeviolationscontroller.routevoilations);
 
 //previous files
 app.get("/previous", previoustablecontroller.previousTable);
-
-
-
-
 
 // Create a Server
 let server = app.listen(8080, function () {

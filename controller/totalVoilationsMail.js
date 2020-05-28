@@ -46,7 +46,7 @@ module.exports.totalvoilations = function (req, res) {
         console.log("Saved!");
       });
       // res.send(emails);
-      // res.render("feedback.ejs", { feeds: emails });
+      res.render("feedback.ejs", { feeds: emails, type: "Total Violation" });
     }
   });
 };
