@@ -45,8 +45,8 @@ module.exports.totalvoilations = function (req, res) {
         if (err) throw err;
         console.log("Saved!");
       });
-      // res.send(emails);
-      // res.render("feedback.ejs", { feeds: emails });
+//       res.send(emails);
+  //     res.render("feedback.ejs", { feeds: emails , type: "Route Violation" });
     }
   });
 };
