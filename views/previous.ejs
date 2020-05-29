@@ -34,9 +34,9 @@
         </div>
     </div>
 </nav>
-    <div class="container text-center">
+    <div class="container-fluid text-center">
         <h1>Previous Data</h1>
-        <table id="example" class="table table-striped table-bordered">
+        <table id="example" class="table  table-striped table-bordered">
             <thead>
                 <tr>
                   <th>Location Code</th>
@@ -49,6 +49,8 @@
                   <th>Speed Violations</th>
                   <th>Stoppage Violations</th>
                   <th>Route Violations</th>
+                  <th>From Date</th>
+                  <th>To Date</th>
                 </tr>
               </thead>
               <tbody>
@@ -64,6 +66,8 @@
                         <td><%= details[i].NO_OF_SPEED_VOILATIONS %></td>
                         <td><%= details[i].NO_OF_STOPPAGE_VOILATIONS %></td>
                         <td><%= details[i].NO_OF_ROUTE_VOILATIONS %> </td>
+                        <td><%= details[i].FROM_DATE %></td>
+                        <td><%= details[i].TO_DATE %></td>
                       </tr>
                 <% } %>
               </tbody>
