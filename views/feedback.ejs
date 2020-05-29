@@ -48,14 +48,18 @@
         <thead>
           <tr>
           <th>S.No</th>
+          <th>Truck Number</th>
           <th>Email</th>
+          <th>Status</th>
         </tr>
         </thead>
         <tbody>
         <% for( let i = 0; i < feeds.length; i++ ) { %>
           <tr class="table-success">
           <td><%= i+1 %></td>  
-          <td><%= feeds[i].EMAIL %></td> 
+          <td><%= feeds[i].TANK_TRUCK_NUMBER %></td>
+          <td><%= feeds[i].EMAIL %></td>
+          <td><i class="fa fa-check" aria-hidden="true"></i></td>
         </tr>   
             <% } %> 
         </tbody>

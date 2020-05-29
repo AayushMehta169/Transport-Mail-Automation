@@ -43,7 +43,7 @@ module.exports.totalvoilations = function (req, res) {
       await mailer.mailer(emails.length, emails, type);
       fs.appendFile("logging.txt", datetime + "\n", function (err) {
         if (err) throw err;
-        console.log("Saved!");
+        console.log("Saved!"); 
       });
       // res.send(emails);
       res.render("feedback.ejs", { feeds: emails, type: "Total Violation" });
