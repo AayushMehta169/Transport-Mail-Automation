@@ -40,7 +40,8 @@ module.exports.totalvoilations = function (req, res) {
     } else {
       totalv(emails);
       var type = 4;
-      await mailer.mailer(emails.length, emails, type);
+      var cc = req.body.otheremails;
+      await mailer.mailer(emails.length, emails, type, cc);
       fs.appendFile("logging.txt", datetime + "\n", function (err) {
         if (err) throw err;
         console.log("Saved!"); 

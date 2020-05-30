@@ -39,7 +39,7 @@ module.exports = function(app, passport) {
     })
 
     //total violations
-    app.get("/totalviolations", isLoggedIn,totalvoilationscontroller.totalvoilations);
+    app.post("/totalviolations", isLoggedIn,totalvoilationscontroller.totalvoilations);
 
     //speed violations
     app.get("/speedviolations", isLoggedIn,speedviolationscontroller.speedvoilations);

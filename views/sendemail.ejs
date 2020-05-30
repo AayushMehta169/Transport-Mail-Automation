@@ -64,12 +64,12 @@
           </div>
         <div class="jumbotron">
             
-        <form action="../totalviolations" method="GET" enctype="multipart/form-data">
+        <form action="../totalviolations" method="POST">
             <div class="form-group">
-              <label for="exampleInputEmail1">Email</label><br>
-              <input type="text" name="" id="" accept=".xls,.xlsx">
-              
-            </div>
+                <label>Email</label>
+                <input type="text" class="form-control" name="otheremails" />
+                <small id="emailHelp" class="form-text text-muted">Please enter multiple emails seperated by comma (,)</small>
+              </div>
             <input type="submit" class="btn btn-primary" onclick=hideData() value="Send"></input>
           </form>
           </div>
