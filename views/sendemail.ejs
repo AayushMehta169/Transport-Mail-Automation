@@ -13,7 +13,14 @@
             .navbar{
             margin-left:5px;
             width:100%;
-                }   
+                }
+            #loader{
+                display: none;
+                margin-top: 20%;
+            }
+            #text{
+                margin-top: 3%;
+            }   
         </style>
 </head>
 
@@ -42,7 +49,13 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+    <div id="loader" class=" text-center">
+        <div class="spinner-grow " style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        <h1 id="text">Please wait, sending mails...</h1>
+    </div>
+    <div class="container" id="pre">
         <div class="alert alert-success mt-2" role="alert">
             <%= status.msg %>
           </div>
@@ -57,7 +70,7 @@
               <input type="text" name="" id="" accept=".xls,.xlsx">
               
             </div>
-            <input type="submit" class="btn btn-primary" value="Send"></input>
+            <input type="submit" class="btn btn-primary" onclick=hideData() value="Send"></input>
           </form>
           </div>
     </div>
@@ -71,6 +84,14 @@
     </script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    </script>
+    <script>
+        function hideData(){
+          const predata =  document.getElementById('pre');
+          const postdata = document.getElementById('loader')
+          predata.style.display = "none";  
+          postdata.style.display = "block";
+        }
     </script>
 </body>
 

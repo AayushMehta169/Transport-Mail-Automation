@@ -14,14 +14,59 @@
     />
   </head>
   <body>
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+          <a class="navbar-brand" href="#">Bulk Petroleum</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mr-auto">
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/profile">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="/previous">Previous Uploads</a>
+                  </li>
+              </ul>
+              <ul class="navbar-nav">
+                  <li class="nav-item">
+                      <a href="/logout" class="btn btn-danger btn-sm pull-right" >Logout</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </nav>
+    <div class="container text-center">
+      <h1>Mails sent successfully to..</h1>
       <%# feeds.forEach(feed => { %>
-            <%#= feed.EMAIL %> 
-      <%# }) %>
-        <h5><%= type %></h5> 
+        <%#= feed.EMAIL %> 
+  <%# }) %>
+    <h5><%= type %></h5> 
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+          <th>S.No</th>
+          <th>Truck Number</th>
+          <th>Email</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
         <% for( let i = 0; i < feeds.length; i++ ) { %>
-          <p><%= feeds[i].EMAIL %></p>    
-        <% } %> 
+          <tr class="table-success">
+          <td><%= i+1 %></td>  
+          <td><%= feeds[i].TANK_TRUCK_NUMBER %></td>
+          <td><%= feeds[i].EMAIL %></td>
+          <td><i class="fa fa-check" aria-hidden="true"></i></td>
+        </tr>   
+            <% } %> 
+        </tbody>
+      
+              
+      </table>
+     
     </div>
   </body>
 </html>
