@@ -1,3 +1,9 @@
+const totalvoilationscontroller = require("../controller/totalVoilationsMail");
+const speedviolationscontroller = require("../controller/speedVoilationsMail");
+const stopviolationscontroller = require("../controller/stopVoilationsMail");
+const routeviolationscontroller = require("../controller/routeVoilationsMail");
+const previoustablecontroller = require("../controller/viewPrevious");
+
 module.exports = function(app, passport) {
     app.get('/', function(req,res){
         res.render('index.ejs');
@@ -31,6 +37,21 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     })
+
+    //total violations
+    app.get("/totalviolations", isLoggedIn,totalvoilationscontroller.totalvoilations);
+
+    //speed violations
+    app.get("/speedviolations", isLoggedIn,speedviolationscontroller.speedvoilations);
+
+    //stoppage violations
+    app.get("/stopviolations", isLoggedIn,stopviolationscontroller.stopvoilations);
+
+    //route violations
+    app.get("/routeviolations", isLoggedIn,routeviolationscontroller.routevoilations);
+
+    //previous files
+    app.get("/previous", isLoggedIn,previoustablecontroller.previousTable);
 };
 
 function isLoggedIn(req, res, next){

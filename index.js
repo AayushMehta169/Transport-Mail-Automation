@@ -10,11 +10,7 @@ var passport = require("passport");
 var flash = require("connect-flash");
 
 const uploadfilecontroller = require("./controller/apiUploadFile");
-const totalvoilationscontroller = require("./controller/totalVoilationsMail");
-const speedviolationscontroller = require("./controller/speedVoilationsMail");
-const stopviolationscontroller = require("./controller/stopVoilationsMail");
-const routeviolationscontroller = require("./controller/routeVoilationsMail");
-const previoustablecontroller = require("./controller/viewPrevious");
+
 
 global.__basedir = __dirname;
 
@@ -63,21 +59,6 @@ app.post(
   upload.single("uploadfile"),
   uploadfilecontroller.apiuploadfile
 );
-
-//total violations
-app.get("/totalviolations", totalvoilationscontroller.totalvoilations);
-
-//speed violations
-app.get("/speedviolations", speedviolationscontroller.speedvoilations);
-
-//stoppage violations
-app.get("/stopviolations", stopviolationscontroller.stopvoilations);
-
-//route violations
-app.get("/routeviolations", routeviolationscontroller.routevoilations);
-
-//previous files
-app.get("/previous", previoustablecontroller.previousTable);
 
 
 
