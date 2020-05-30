@@ -47,6 +47,8 @@ module.exports.totalvoilations = function (req, res) {
       });
       // res.send(emails);
       res.render("feedback.ejs", { feeds: emails, type: "Total Violation" });
+      
+
     }
   });
 };
