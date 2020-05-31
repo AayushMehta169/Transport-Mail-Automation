@@ -1,6 +1,5 @@
 var transporter = require("../config/emailConfig");
 
-
 module.exports.mailer = async (no, emails, type, cc) => {
   var loc;
   var name;
@@ -27,34 +26,45 @@ module.exports.mailer = async (no, emails, type, cc) => {
 
   for (i in emails) {
     let attach = [];
-    if (emails[i].NO_OF_ROUTE_VOILATIONS > 0) { 
-      attach.push(routeViolationattach); 
-    } 
-    if (emails[i].NO_OF_SPEED_VOILATIONS > 0) { 
-      attach.push(speedViolationattach); 
-    } 
-    if (emails[i].NO_OF_STOPPAGE_VOILATIONS > 0) { 
-      attach.push(stoppageViolationattach); 
-    } 
-    if (attach.length>=2) {  
-      attach.push(TDGViolationattach); 
-    } 
-    if (type === 4) { 
+    if (emails[i].NO_OF_ROUTE_VOILATIONS > 0) {
+      attach.push(routeViolationattach);
+    }
+    if (emails[i].NO_OF_SPEED_VOILATIONS > 0) {
+      attach.push(speedViolationattach);
+    }
+    if (emails[i].NO_OF_STOPPAGE_VOILATIONS > 0) {
+      attach.push(stoppageViolationattach);
+    }
+    if (attach.length >= 2) {
+      attach.push(TDGViolationattach);
+    }
+    if (type === 4) {
       let info = await transporter.sendMail({
         from: '"yoman" <example@yo.com>', // sender address
         to: emails[i].EMAIL, // list of receivers
         cc: cc,
         subject: "Violation", // Subject line
-        html: "<b>Violation" +
-          "<br>" +
-          emails[i].NO_OF_STOPPAGE_VOILATIONS +
-          "<br>" +
-          emails[i].NO_OF_SPEED_VOILATIONS +
-          "<br>" +
-          emails[i].NO_OF_ROUTE_VOILATIONS +
-          "<br>" +
+        html:
+          "<p>Dear Sir,</p><p> This is with regards to the Transport agreement that was entered into by _______(Transporter name) and our Corporation for transportation of Bulk Petroleum Products from Chennai New Terminal ,Ennore to various retail outlets/customers.</p><p> The following email is to inform you that your Tank Truck number <strong>" +
           emails[i].TANK_TRUCK_NUMBER +
-          "</b>", // html body
+          "</strong>as observed from the VTS report has caused _________(name of all violations separated with commas in bold) in the period:_____ (from date in bold) to ______ (to date in bold) with regard to the agreed Terms and Conditions of the Transport Agreement and applicable Industry Transport Discipline Guidelines.</p><table> <tr> <th>Sr no</th> <th>TDG violation</th> <th>No. of trips</th> <th>No. of times</th> </tr><tr> <td>1</td><td>Route</td><td></td><td>" +
+          emails[i].NO_OF_ROUTE_VOILATIONS +
+          "</td></tr><tr> <td>2</td><td>Stoppage</td><td></td><td>" +
+          emails[i].NO_OF_STOPPAGE_VOILATIONS +
+          "</td></tr><tr> <td>3</td><td>Speed</td><td></td><td>" +
+          emails[i].NO_OF_SPEED_VOILATIONS +
+          "</td></tr></table><p> Please refer to the following letter(s) for “_______(name of all violations separated with commas in bold)” attached herewith.</p><p> Note : Tampering of VTS MU will result in termination of transportation contract on Industry basis.</p><p>Date:_____(date of sending the email)</p><p>With Regards,</p><p>Vikas Gupta</p><p>Vikas Gupta</p><p>HPCL, Chennai New Terminal</p>",
+
+        //  "<b>Violation" +
+        //   "<br>" +
+        //   emails[i].NO_OF_STOPPAGE_VOILATIONS +
+        //   "<br>" +
+        //   emails[i].NO_OF_SPEED_VOILATIONS +
+        //   "<br>" +
+        //   emails[i].NO_OF_ROUTE_VOILATIONS +
+        //   "<br>" +
+        //   emails[i].TANK_TRUCK_NUMBER +
+        //   "</b>", // html body
 
         attachments: attach,
         dsn: {
@@ -72,16 +82,19 @@ module.exports.mailer = async (no, emails, type, cc) => {
     // Below functions are for future purpose ------------------
 
     if (type === 1) {
-      let info = await transporter.sendMail({
+      let info = await transporter.sendMail(
+        {
           from: '"yoman" <example@yo.com>', // sender address
           to: emails[i].EMAIL, // list of receivers
           subject: "Route Violation", // Subject line
           text: "Route Violation", // plain text body
           html: "<b>Route Violation?</b>", // html body
-          attachments: [{
-            filename: "Route Violation.docx",
-            path: "./public/attachments/route_violation.docx",
-          }, ],
+          attachments: [
+            {
+              filename: "Route Violation.docx",
+              path: "./public/attachments/route_violation.docx",
+            },
+          ],
           dsn: {
             id: "123",
             return: "headers",
@@ -105,10 +118,12 @@ module.exports.mailer = async (no, emails, type, cc) => {
         subject: "Speed Violation", // Subject line
         text: "Speed Violation", // plain text body
         html: "<b>Speed Violation?</b>", // html body
-        attachments: [{
-          filename: "Speed Violation.docx",
-          path: "./public/attachments/Speed_violation.docx",
-        }, ],
+        attachments: [
+          {
+            filename: "Speed Violation.docx",
+            path: "./public/attachments/Speed_violation.docx",
+          },
+        ],
         dsn: {
           id: "123",
           return: "headers",
@@ -127,10 +142,12 @@ module.exports.mailer = async (no, emails, type, cc) => {
         subject: "Stoppage Violation", // Subject line
         text: "Stoppage Violation", // plain text body
         html: "<b>Stoppage Violation?</b>", // html body
-        attachments: [{
-          filename: "Stoppage Violation.docx",
-          path: "./public/attachments/Stoppage_violation.docx",
-        }, ],
+        attachments: [
+          {
+            filename: "Stoppage Violation.docx",
+            path: "./public/attachments/Stoppage_violation.docx",
+          },
+        ],
         dsn: {
           id: "123",
           return: "headers",
