@@ -1,7 +1,7 @@
 var transporter = require("../config/emailConfig");
 
 
-module.exports.mailer = async (no, emails, type) => {
+module.exports.mailer = async (no, emails, type, cc) => {
   var loc;
   var name;
   var TDGViolationfile = "TDG violation letter.pdf";
@@ -43,6 +43,7 @@ module.exports.mailer = async (no, emails, type) => {
       let info = await transporter.sendMail({
         from: '"yoman" <example@yo.com>', // sender address
         to: emails[i].EMAIL, // list of receivers
+        cc: cc,
         subject: "Violation", // Subject line
         html: "<b>Violation" +
           "<br>" +
