@@ -27,7 +27,13 @@ module.exports.totalvoilations = function (req, res) {
     datetime +
     "`.NO_OF_ROUTE_VOILATIONS,`" +
     datetime +
-    "`.TANK_TRUCK_NUMBER FROM `" +
+    "`.TANK_TRUCK_NUMBER ,`"+
+    datetime+
+    "`.TRANSPORTER_NAME,`"+
+    datetime+
+    "`.FROM_DATE,`"+
+    datetime+
+    "`.TO_DATE FROM `"+
     datetime +
     "` INNER JOIN emaildetails ON emaildetails.TANK_TRUCK_NUMBER = `" +
     datetime +
@@ -40,6 +46,7 @@ module.exports.totalvoilations = function (req, res) {
     } else {
       totalv(emails);
       var type = 4;
+      console.log(sql);
       var cc = req.body.otheremails;
       await mailer.mailer(emails.length, emails, type, cc);
       fs.appendFile("logging.txt", datetime + "\n", function (err) {
