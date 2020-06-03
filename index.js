@@ -10,7 +10,7 @@ var passport = require("passport");
 var flash = require("connect-flash");
 
 const uploadfilecontroller = require("./controller/apiUploadFile");
-
+const uploadcontactfilecontroller = require("./controller/apiUploadContactFile")
 
 global.__basedir = __dirname;
 
@@ -58,6 +58,12 @@ app.post(
   "/api/uploadfile",
   upload.single("uploadfile"),
   uploadfilecontroller.apiuploadfile
+);
+
+app.post(
+  "/api/uploadcontactfile",
+  upload.single("uploadfile"),
+  uploadcontactfilecontroller.apiuploadcontactfile
 );
 
 
