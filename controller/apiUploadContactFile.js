@@ -16,6 +16,12 @@ module.exports.apiuploadcontactfile=function(req, res){
       let rows =  XLSX.utils.sheet_to_json(excelfile.Sheets['Sheet1'], {header:1});
       // Remove Header ROW
       rows.shift();
+      for (i in rows){
+        rows[i][6] = null;
+        rows[i][7] = null;
+        rows[i][8] = null;
+        rows[i][12] = null;
+      }
         console.log(rows);
       // check if table already exist
       let query2 = 'DROP TABLE IF EXISTS `emaildetails`';
@@ -27,14 +33,14 @@ module.exports.apiuploadcontactfile=function(req, res){
         });
 
       // MySQL data insert using previous connection
-          let queryinit= "CREATE TABLE `emaildetails` (id int,Carrier_No varchar(255),Carrier_Name varchar(255),Type_of_TT varchar(255),Capacity_KL varchar(255),Phone_No varchar(255),Phone_No_2 varchar(255),EMAIL varchar(255),Agreement_dt varchar(255));";
+          let queryinit= "CREATE TABLE `emaildetails` (id int,truck_Number varchar(255),Carrier_No varchar(255),Carrier_Name varchar(255),Type_of_TT varchar(255),Capacity_KL varchar(255),Address1 varchar(255),Address2 varchar(255),Address3 varchar(255),Phone_No varchar(255),Phone_No_2 varchar(255) NULL,EMAIL varchar(255),Agreement_dt varchar(255));";
             connection.query(queryinit,(error, response) => {
               if(error){
                 flag+=1;
                 console.log(error);
                 }
                 else {
-                  let query = "INSERT INTO `emaildetails` (`id`,`Carrier_No`, `Carrier_Name`, `Type_of_TT` ,`Capacity_KL`, `Phone_No`, `Phone_No_2`, `EMAIL`, `Agreement_dt`) VALUES ?";
+                  let query = "INSERT INTO `emaildetails` (`id`,`truck_Number`,`Carrier_No`, `Carrier_Name`, `Type_of_TT` ,`Capacity_KL`,`Address1`,`Address2`,`Address3` ,`Phone_No`, `Phone_No_2`, `EMAIL`, `Agreement_dt`) VALUES ?";
                 connection.query(query, [rows], (error, response) => {
                   if(error){
                     flag+=1;
