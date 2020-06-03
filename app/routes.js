@@ -52,7 +52,13 @@ module.exports = function(app, passport) {
 
     //previous files
     app.get("/previous", isLoggedIn,previoustablecontroller.previousTable);
+
+    //update contact details
+    app.get("/updatecontact", isLoggedIn,function(req,res){
+        res.render('updatecontact.ejs');
+    });
 };
+
 
 function isLoggedIn(req, res, next){
     if(req.isAuthenticated())
