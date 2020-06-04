@@ -34,14 +34,14 @@ module.exports.apiuploadcontactfile=function(req, res){
         });
 
       // MySQL data insert using previous connection
-          let queryinit= "CREATE TABLE `emaildetails` (id int,Truck_Number varchar(255),Carrier_No varchar(255),Carrier_Name varchar(255),Type_of_TT varchar(255),Capacity_KL varchar(255),Address1 varchar(255),Address2 varchar(255),Address3 varchar(255),Phone_No varchar(255),Phone_No_2 varchar(255) NULL,EMAIL varchar(255),Agreement_dt varchar(255),PRIMARY KEY (Truck_Number));";
+          let queryinit= "CREATE TABLE `emaildetails` (id int,TANK_TRUCK_NUMBER varchar(255),Carrier_No varchar(255),Carrier_Name varchar(255),Type_of_TT varchar(255),Capacity_KL varchar(255),Address1 varchar(255),Address2 varchar(255),Address3 varchar(255),Phone_No varchar(255),Phone_No_2 varchar(255) NULL,EMAIL varchar(255),Agreement_dt varchar(255),PRIMARY KEY (TANK_TRUCK_NUMBER));";
             connection.query(queryinit,(error, response) => {
               if(error){
                 flag+=1;
                 console.log(error);
                 }
                 else {
-                  let query = "INSERT INTO `emaildetails` (`id`,`truck_Number`,`Carrier_No`, `Carrier_Name`, `Type_of_TT` ,`Capacity_KL`,`Address1`,`Address2`,`Address3` ,`Phone_No`, `Phone_No_2`, `EMAIL`, `Agreement_dt`) VALUES ?";
+                  let query = "INSERT INTO `emaildetails` (`id`,`TANK_TRUCK_NUMBER`,`Carrier_No`, `Carrier_Name`, `Type_of_TT` ,`Capacity_KL`,`Address1`,`Address2`,`Address3` ,`Phone_No`, `Phone_No_2`, `EMAIL`, `Agreement_dt`) VALUES ?";
                 connection.query(query, [rows], (error, response) => {
                   if(error){
                     flag+=1;
