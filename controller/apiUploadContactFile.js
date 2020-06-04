@@ -22,6 +22,7 @@ module.exports.apiuploadcontactfile=function(req, res){
         rows[i][8] = null;
         rows[i][12] = null;
       }
+      rows = rows.filter(function(value, index, arr){ return value.length === 13;});
         console.log(rows);
       // check if table already exist
       let query2 = 'DROP TABLE IF EXISTS `emaildetails`';
@@ -33,7 +34,7 @@ module.exports.apiuploadcontactfile=function(req, res){
         });
 
       // MySQL data insert using previous connection
-          let queryinit= "CREATE TABLE `emaildetails` (id int,truck_Number varchar(255),Carrier_No varchar(255),Carrier_Name varchar(255),Type_of_TT varchar(255),Capacity_KL varchar(255),Address1 varchar(255),Address2 varchar(255),Address3 varchar(255),Phone_No varchar(255),Phone_No_2 varchar(255) NULL,EMAIL varchar(255),Agreement_dt varchar(255));";
+          let queryinit= "CREATE TABLE `emaildetails` (id int,Truck_Number varchar(255),Carrier_No varchar(255),Carrier_Name varchar(255),Type_of_TT varchar(255),Capacity_KL varchar(255),Address1 varchar(255),Address2 varchar(255),Address3 varchar(255),Phone_No varchar(255),Phone_No_2 varchar(255) NULL,EMAIL varchar(255),Agreement_dt varchar(255),PRIMARY KEY (Truck_Number));";
             connection.query(queryinit,(error, response) => {
               if(error){
                 flag+=1;
