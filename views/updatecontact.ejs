@@ -44,14 +44,25 @@
         <div class="page-header text-center mt-1">
             <h1><span class="fa fa-user"></span> Update Contact Details</h1>
         </div>
+        <% if (status){%>
+            <% if (status.file) {%>
+        <div class="alert alert-success mt-2" role="alert">
+            <%= status.msg %>
+          </div>
+          <% } else {%>
+          <div class="alert alert-danger mt-2" role="alert">
+            <%= status.msg %>
+          </div>
+          <% }%>
+          <% }%>
         <div class="jumbotron mt-5">
-        <form action="api/" method="POST" enctype="multipart/form-data">
+        <form action="/api/uploadcontactfile" method="POST" enctype="multipart/form-data">
             <div class="form-group">
               <label for="exampleInputEmail1">Upload File having transporter contact details</label><br>
               <input type="file" name="uploadfile" id="uploadfile" accept=".xls,.xlsx" required>
               <small id="emailHelp" class="form-text text-muted">Please upload excel file containing new contact details(Email and Tank Truck No. necessarily) only in .xls and .xlsx format</small>
             </div>
-            <input type="submit" class="btn btn-primary"></input>
+            <input type="submit" value="Upload" class="btn btn-primary"></input>
           </form>
           </div>
     </div>

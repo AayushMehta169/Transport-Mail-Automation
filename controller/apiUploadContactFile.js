@@ -8,7 +8,7 @@ module.exports.apiuploadcontactfile=function(req, res){
   
     // -> Import`'+ datetime +'`Excel Data to MySQL database
   function importExcelData2MySQL(filePath){
-    let flag = 0;
+    var flag = 0;
     // File path.
     var excelfile = XLSX.readFile(filePath);
       // `rows` is an array of rows
@@ -49,23 +49,23 @@ module.exports.apiuploadcontactfile=function(req, res){
                   }
                   });
                 }
-                if(flag>0){
-                  res.send( {
-                    status: {
-                      'msg': 'File upload/import Failed!', 
-                    }
-                  })
-                }
-                else if(flag==0){
-                  res.send({
-                    status: {
-                      'msg': 'File uploaded/import successfully!', 
-                      'file': req.file,  
-                      'TotalRows':rows.length,
-                    }
-                  })
-                }
             });
+            if(flag>0){
+              res.render("updatecontact.ejs" ,{
+                status: {
+                  'msg': 'File upload/import Failed!', 
+                }
+              })
+            }
+            else if(flag==0){
+              res.render("updatecontact.ejs",{
+                status: {
+                  'msg': 'Contacts uploaded/import successfully!', 
+                  'file': req.file,  
+                  'TotalRows':rows.length,
+                }
+              })
+            }
   }      
     
   }
