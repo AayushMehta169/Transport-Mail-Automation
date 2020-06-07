@@ -55,7 +55,7 @@ module.exports = function(app, passport) {
 
     //update contact details
     app.get("/updatecontact", isLoggedIn,function(req,res){
-        res.render('updatecontact.ejs');
+        res.render('updatecontact.ejs',{status:null});
     });
 };
 
