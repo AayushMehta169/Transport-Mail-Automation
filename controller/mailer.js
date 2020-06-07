@@ -81,15 +81,15 @@ module.exports.mailer = async (no, emails, type, cc) => {
         //   "<br>" +
         //   emails[i].TANK_TRUCK_NUMBER +
         //   "</b>", // html body
-
-        attachments: [
-          {
-            filename: "sign.png",
-            path: "./public/attachment/sign.png",
-            cid: "hello",
-          },
-          attach,
-        ],
+        attachments: attach,
+        // attachments: [
+        //   {
+        //     filename: "sign.png",
+        //     path: "./public/attachment/sign.png",
+        //     cid: "hello",
+        //   },
+        //   attach,
+        // ],
         dsn: {
           id: "123",
           return: "headers",
