@@ -1,8 +1,12 @@
 var transporter = require("../config/emailConfig");
+const a = new Date();
+var month = ("0" + (a.getMonth() + 1)).slice(-2);
+var date = ("0" + a.getDate()).slice(-2);
+const datetime = date + "." + month + "." + a.getFullYear();
 
-const date = new Date();
-const datetime =
-  date.getDate() + " " + date.getMonth() + " " + date.getFullYear();
+// const date = new Date();
+// const datetime =
+//   date.getDate() + " " + date.getMonth() + " " + date.getFullYear();
 
 module.exports.mailer = async (no, emails, type, cc) => {
   var loc;
@@ -49,15 +53,23 @@ module.exports.mailer = async (no, emails, type, cc) => {
         cc: cc,
         subject: "Violation", // Subject line
         html:
-          "<style>th, td {padding: 15px;border: 1px solid black;}</style><p>Dear Sir,</p><p> This is with regards to the Transport agreement that was entered into by <b>"+emails[i].TRANSPORTER_NAME  +"</b> and our Corporation for transportation of Bulk Petroleum Products from Chennai New Terminal ,Ennore to various retail outlets/customers.</p><p> The following email is to inform you that your Tank Truck number <strong>" +
+          "<style>th, td {padding: 15px;border: 1px solid black;}</style><p>Dear Sir,<span style='float: right'>Date: <b>" +
+          datetime +
+          "</b> </span> </p> <p> This is with regards to the Transport agreement that was entered into by <b>" +
+          emails[i].TRANSPORTER_NAME +
+          "</b> and our Corporation for transportation of Bulk Petroleum Products from Chennai New Terminal ,Ennore to various retail outlets/customers.</p><p> The following email is to inform you that your Tank Truck number <strong>" +
           emails[i].TANK_TRUCK_NUMBER +
-          "</strong> as observed from the VTS report has caused Route violations, Speed violations and Stoppage violations in the period: <b>"+ emails[i].FROM_DATE +"</b> to <b>"+ emails[i].TO_DATE +"</b> with regard to the agreed Terms and Conditions of the Transport Agreement and applicable Industry Transport Discipline Guidelines.</p><table style='border: 1px solid black;'> <tr> <th>Sr no</th> <th>TDG violation</th> <th>No. of times</th> </tr><tr> <td>1</td><td>Route violations</td><td>" +
+          "</strong> as observed from the VTS report has caused Route violations, Speed violations and Stoppage violations in the period: <b>" +
+          emails[i].FROM_DATE +
+          "</b> to <b>" +
+          emails[i].TO_DATE +
+          "</b> with regard to the agreed Terms and Conditions of the Transport Agreement and applicable Industry Transport Discipline Guidelines.</p><table style='border: 1px solid black;'> <tr> <th>Sr no</th> <th>TDG violation</th> <th>No. of times</th> </tr><tr> <td>1</td><td>Route violations</td><td>" +
           emails[i].NO_OF_ROUTE_VOILATIONS +
           "</td></tr><tr> <td>2</td><td>Stoppage violations</td><td>" +
           emails[i].NO_OF_STOPPAGE_VOILATIONS +
           "</td></tr><tr> <td>3</td><td>Speed violations</td><td>" +
           emails[i].NO_OF_SPEED_VOILATIONS +
-          "</td></tr></table><p> Please refer to the following letter(s) for violations attached herewith.</p><p> Note : Tampering of VTS MU will result in termination of transportation contract on Industry basis.</p><p>Date: <b>"+ datetime +"</b> </p><p>With Regards,</p><p>Vikas Gupta</p><p>Vikas Gupta</p><p>HPCL, Chennai New Terminal</p>",
+          "</td></tr></table><p> Please refer to the following letter(s) for violations attached herewith.</p><p> Note : Tampering of VTS MU will result in termination of transportation contract on Industry basis.</p><p>With Regards,</p><p>Vikas Gupta</p><p>HPCL, Chennai New Terminal</p><img src='cid:hello'>",
 
         //  "<b>Violation" +
         //   "<br>" +
@@ -70,7 +82,14 @@ module.exports.mailer = async (no, emails, type, cc) => {
         //   emails[i].TANK_TRUCK_NUMBER +
         //   "</b>", // html body
 
-        attachments: attach,
+        attachments: [
+          {
+            filename: "sign.png",
+            path: "./public/attachment/sign.png",
+            cid: "hello",
+          },
+          attach,
+        ],
         dsn: {
           id: "123",
           return: "headers",
